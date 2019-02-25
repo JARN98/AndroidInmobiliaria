@@ -1,6 +1,7 @@
 package com.example.viveinmobiliaria.Fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.example.viveinmobiliaria.Inmuebles;
 import com.example.viveinmobiliaria.R;
 import com.example.viveinmobiliaria.Responses.LoginResponse;
 import com.example.viveinmobiliaria.Services.SessionService;
+import com.example.viveinmobiliaria.SessionActivity;
 
 import okhttp3.Credentials;
 import retrofit2.Call;
@@ -33,6 +35,7 @@ public class LoginFragment extends Fragment {
     private EditText editText_email_login, editText_passwordrep_login;
     private Button button_login, button_registroAlogin;
     private LoginInterface loginInterface;
+    ProgressDialog progressDialog;
 
 
     public LoginFragment() {
@@ -55,6 +58,9 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
                 doLogin();
             }
         });
@@ -103,6 +109,7 @@ public class LoginFragment extends Fragment {
 
         String credentials = Credentials.basic(email, password);
 
+
         if (validarString(email) && validarString(password)) {
 
             SessionService service = ServiceGenerator.createService(SessionService.class);
@@ -135,6 +142,7 @@ public class LoginFragment extends Fragment {
 
             Toast.makeText(getContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
         }
+        progressDialog.dismiss();
     }
 
     Boolean validarString(String texto) {

@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
     private static final String BASE_URL = "https://vive-inmobiliaria.herokuapp.com";
-    public static String MASTER_KEY = "POIERQUTOIREUEWOUITWIO";
+    public static String MASTER_KEY = "SPRPOIRPOWQIERPOQWEOQWRIPQPOEIRW";
 
     public static String jwtToken = null;
 

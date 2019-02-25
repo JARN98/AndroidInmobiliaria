@@ -5,11 +5,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class Inmuebles extends AppCompatActivity {
+import com.example.viveinmobiliaria.Fragments.LoginFragment;
+import com.example.viveinmobiliaria.Fragments.listaInmueblesFavoritos;
+import com.example.viveinmobiliaria.Fragments.listaInmueblesFragment;
+import com.example.viveinmobiliaria.Listener.InmueblesListener;
 
-    private TextView mTextMessage;
+public class Inmuebles extends AppCompatActivity implements InmueblesListener {
+
+    private FrameLayout contenedor;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -18,14 +24,21 @@ public class Inmuebles extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.contenedor, new listaInmueblesFragment())
+                            .commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.contenedor, new listaInmueblesFavoritos())
+                            .commit();
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+
                     return true;
+
             }
             return false;
         }
@@ -36,9 +49,18 @@ public class Inmuebles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inmuebles);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.contenedor, new listaInmueblesFragment())
+                .commit();
+
+        contenedor = findViewById(R.id.contenedor);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public void verCasa(String casa) {
+
+    }
 }
