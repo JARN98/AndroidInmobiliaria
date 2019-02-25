@@ -1,6 +1,6 @@
 package com.example.viveinmobiliaria.Model;
 
-public class Propiedad {
+public class PropiedaFavoritasDto {
     private String title;
     private String description;
     private double price;
@@ -10,13 +10,10 @@ public class Propiedad {
     private String city;
     private String province;
     private String loc;
-    private Owner ownerId;
+    private String ownerId;
     private String id;
 
-    public Propiedad() {
-    }
-
-    public Propiedad(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, Owner ownerId, String id) {
+    public PropiedaFavoritasDto(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, String ownerId, String id) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -102,11 +99,11 @@ public class Propiedad {
         this.loc = loc;
     }
 
-    public Owner getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(Owner ownerId) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -123,24 +120,21 @@ public class Propiedad {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Propiedad propiedad = (Propiedad) o;
+        PropiedaFavoritasDto that = (PropiedaFavoritasDto) o;
 
-        if (Double.compare(propiedad.price, price) != 0) return false;
-        if (rooms != propiedad.rooms) return false;
-        if (title != null ? !title.equals(propiedad.title) : propiedad.title != null) return false;
-        if (description != null ? !description.equals(propiedad.description) : propiedad.description != null)
+        if (Double.compare(that.price, price) != 0) return false;
+        if (rooms != that.rooms) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null)
             return false;
-        if (address != null ? !address.equals(propiedad.address) : propiedad.address != null)
+        if (address != null ? !address.equals(that.address) : that.address != null) return false;
+        if (zipcode != null ? !zipcode.equals(that.zipcode) : that.zipcode != null) return false;
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (province != null ? !province.equals(that.province) : that.province != null)
             return false;
-        if (zipcode != null ? !zipcode.equals(propiedad.zipcode) : propiedad.zipcode != null)
-            return false;
-        if (city != null ? !city.equals(propiedad.city) : propiedad.city != null) return false;
-        if (province != null ? !province.equals(propiedad.province) : propiedad.province != null)
-            return false;
-        if (loc != null ? !loc.equals(propiedad.loc) : propiedad.loc != null) return false;
-        if (ownerId != null ? !ownerId.equals(propiedad.ownerId) : propiedad.ownerId != null)
-            return false;
-        return id != null ? id.equals(propiedad.id) : propiedad.id == null;
+        if (loc != null ? !loc.equals(that.loc) : that.loc != null) return false;
+        if (ownerId != null ? !ownerId.equals(that.ownerId) : that.ownerId != null) return false;
+        return id != null ? id.equals(that.id) : that.id == null;
     }
 
     @Override
@@ -164,7 +158,7 @@ public class Propiedad {
 
     @Override
     public String toString() {
-        return "Propiedad{" +
+        return "PropiedaFavoritasDto{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
@@ -174,44 +168,8 @@ public class Propiedad {
                 ", city='" + city + '\'' +
                 ", province='" + province + '\'' +
                 ", loc='" + loc + '\'' +
-                ", ownerId=" + ownerId +
+                ", ownerId='" + ownerId + '\'' +
                 ", id='" + id + '\'' +
                 '}';
-    }
-}
-
-class Owner {
-    private String id;
-    private String picture;
-    private String name;
-
-    public Owner(String id, String picture, String name) {
-        this.id = id;
-        this.picture = picture;
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

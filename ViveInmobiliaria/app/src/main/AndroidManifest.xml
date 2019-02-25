@@ -13,14 +13,14 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Inmuebles"
-            android:label="@string/title_activity_inmuebles"></activity>
-        <activity android:name=".SessionActivity">
+            android:label="@string/title_activity_inmuebles">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SessionActivity"></activity>
     </application>
 
 </manifest>

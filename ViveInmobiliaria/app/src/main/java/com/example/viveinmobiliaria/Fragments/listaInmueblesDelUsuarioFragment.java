@@ -30,24 +30,28 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class listaInmueblesFavoritos extends Fragment {
+public class listaInmueblesDelUsuarioFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private InmueblesListener mListener;
-    private List<Propiedad> listaPropiedadesFavoritas;
+    private List<Propiedad> listaPropiedadesDelUsuario;
     private MylistaInmueblesRecyclerViewAdapter adapter;
     private Context cxt;
 
-    public listaInmueblesFavoritos() {
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public listaInmueblesDelUsuarioFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static listaInmueblesFavoritos newInstance(int columnCount) {
-        listaInmueblesFavoritos fragment = new listaInmueblesFavoritos();
+    public static listaInmueblesDelUsuarioFragment newInstance(int columnCount) {
+        listaInmueblesDelUsuarioFragment fragment = new listaInmueblesDelUsuarioFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -66,11 +70,11 @@ public class listaInmueblesFavoritos extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listainmuebles_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_listainmueblesdelusuario_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            cxt = view.getContext();
+             cxt = view.getContext();
             final RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(cxt));
@@ -78,11 +82,10 @@ public class listaInmueblesFavoritos extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(cxt, mColumnCount));
             }
 
-
-            listaPropiedadesFavoritas = new ArrayList<>();
+            listaPropiedadesDelUsuario = new ArrayList<>();
 
             PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(getContext()), TipoAutenticacion.JWT);
-            Call<ResponseContainer<Propiedad>> call = service.getFavProperties();
+            Call<ResponseContainer<Propiedad>> call = service.getMineProperties();
 
             call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
                 @Override
@@ -90,11 +93,11 @@ public class listaInmueblesFavoritos extends Fragment {
                     if (response.code() != 200) {
                         Toast.makeText(getActivity(), "Error en petición", Toast.LENGTH_SHORT).show();
                     } else {
-                        listaPropiedadesFavoritas = response.body().getRows();
+                        listaPropiedadesDelUsuario = response.body().getRows();
 
                         adapter = new MylistaInmueblesRecyclerViewAdapter(
                                 cxt,
-                                listaPropiedadesFavoritas,
+                                listaPropiedadesDelUsuario,
                                 mListener
                         );
                         recyclerView.setAdapter(adapter);
@@ -120,7 +123,7 @@ public class listaInmueblesFavoritos extends Fragment {
             mListener = (InmueblesListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement InmueblesListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 

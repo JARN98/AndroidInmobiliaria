@@ -115,6 +115,18 @@
                 app:layout_constraintBottom_toTopOf="@+id/textView_direccion"
                 app:layout_constraintEnd_toEndOf="@+id/textView_direccion"
                 app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+            <ImageView
+                android:id="@+id/imageView_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/refs"
+                app:layout_constraintEnd_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_star_border_yellow_24dp"/>
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
