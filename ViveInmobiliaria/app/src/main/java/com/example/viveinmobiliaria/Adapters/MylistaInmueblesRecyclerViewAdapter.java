@@ -111,7 +111,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
 
         Glide
                 .with(contexto)
-                .load(mValues.get(position).getPhotos().get(0))
+                .load(mValues.get(position).getPhotos()[0])
                 .into(holder.imageView);
 
 

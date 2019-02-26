@@ -3,54 +3,62 @@ package com.example.viveinmobiliaria.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.viveinmobiliaria.R;
+
+import java.util.List;
 
 public class ImageAdapter extends PagerAdapter {
     private Context cxt;
-    private String[] urls;
+    private List<String> urls;
     private ImageView[] photos;
+    private LayoutInflater layoutInflater;
 
-    ImageAdapter(Context context, String[] rutaDeImagenes) {
+    public ImageAdapter(Context context, List<String> rutaDeImagenes) {
         cxt = context;
         urls = rutaDeImagenes;
     }
     @Override
     public int getCount() {
-        return urls.length;
+        return urls.size();
     }
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return false;
+        return view == o;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        ImageView photo = photos[position];
-        photo = new ImageView(cxt);
-        photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        layoutInflater = (LayoutInflater) cxt.getSystemService(cxt.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.custom_layout, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         Glide
                 .with(this.cxt)
-                .load(urls[position])
-                .into(photo);
+                .load(urls.get(position))
+                .into(imageView);
 
 
-        photo.setImageDrawable(photo.getDrawable());
+        ViewPager vp = (ViewPager) container;
+        vp.addView(view, 0);
 
-
-        container.addView(photo, 0);
-        return photo;
+        return view;
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((ImageView) object);
+        ViewPager vp = (ViewPager) container;
+        View view = (View) object;
+        vp.removeView(view);
     }
 }

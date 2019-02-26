@@ -35,4 +35,10 @@ public class SessionActivity extends AppCompatActivity implements LoginFragment.
                 .replace(R.id.sessionContainer, new LoginFragment())
                 .commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

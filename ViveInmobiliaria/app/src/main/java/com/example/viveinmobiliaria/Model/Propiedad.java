@@ -17,9 +17,9 @@ public class Propiedad {
     public String updatedAt;
     public Integer v;
     public String id;
-    public List<String> photos = null;
+    public String[] photos = null;
 
-    public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, List<String> photos) {
+    public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, String[] photos) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -149,11 +149,11 @@ public class Propiedad {
         this.id = id;
     }
 
-    public List<String> getPhotos() {
+    public String[] getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(String[] photos) {
         this.photos = photos;
     }
 

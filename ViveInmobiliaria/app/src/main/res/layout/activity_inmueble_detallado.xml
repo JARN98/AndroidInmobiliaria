@@ -12,19 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+
+        <RelativeLayout
+            android:id="@+id/relative"
             android:layout_width="0dp"
             android:layout_height="450dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textView_descripcion"
@@ -37,9 +42,9 @@
             android:layout_marginRight="8dp"
             android:text="Lorem ipsum dolor sit amet consectetur adipiscing elit, bibendum vehicula ridiculus enim vel phasellus, sagittis vulputate mauris faucibus inceptos ultricies. Vestibulum vulputate cum sed nisi nibh mollis a lacinia, praesent morbi nam urna malesuada sociosqu inceptos lobortis justo, hac felis aenean feugiat aliquet convallis porta. Suspendisse eros eleifend enim ante scelerisque vehicula aptent quis, himenaeos nibh praesent congue habitasse dignissim bibendum, cubilia potenti primis mus dis at nascetur.  Dictumst habitant natoque dis non netus integer in cursus, est diam nisi curae libero iaculis lacus hac justo, auctor accumsan sollicitudin imperdiet ullamcorper pretium orci. Ultrices non dictum accumsan gravida auctor cubilia mus id senectus nullam pharetra praesent augue nisl, volutpat aliquet aliquam fringilla felis duis montes maecenas dis rhoncus varius venenatis porta, sociis nec nascetur facilisi sed molestie quisque libero viverra convallis commodo fusce vehicula. Ac mus posuere netus molestie tellus gravida arcu, congue pellentesque vel ligula auctor luctus ultrices, cubilia per etiam cras aptent eget."
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+            app:layout_constraintTop_toBottomOf="@+id/relative" />
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
@@ -51,6 +56,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_descripcion" />
 

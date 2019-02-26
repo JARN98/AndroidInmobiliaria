@@ -16,4 +16,16 @@
     <string name="title_home"></string>
     <string name="title_dashboard"></string>
     <string name="title_notifications"></string>
+    <string name="CambiarPass">Cambiar Contraseña</string>
+    <string name="Logout">Logout</string>
+    <string name="Password">Contraseña</string>
+    <string name="NuevaPass">Nueva Contraseña</string>
+    <string name="Cambiar">Cambiar</string>
+    <string name="NombrePerfil">Nombre de perfil</string>
+    <string name="EmailPerfil">Email</string>
+    <string name="RepetirPass">Repetir contraseña</string>
+    <string name="dialog_message">¿Estás Seguro?</string>
+    <string name="dialog_title">¿Quieres cerrar sesión?</string>
+    <string name="ok">Salir</string>
+    <string name="cancel">Cancelar</string>
 </resources>

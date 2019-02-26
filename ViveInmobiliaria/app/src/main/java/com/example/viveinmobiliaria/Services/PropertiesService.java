@@ -2,6 +2,7 @@ package com.example.viveinmobiliaria.Services;
 
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
+import com.example.viveinmobiliaria.Model.ResponseContainerNoList;
 import com.example.viveinmobiliaria.Model.addFavouriteDto;
 
 import retrofit2.Call;
@@ -24,7 +25,7 @@ public interface PropertiesService {
     Call<addFavouriteDto> addFavPropertie(@Path("id") String id);
 
     @GET("/properties/{id}")
-    Call<ResponseContainer<Propiedad>> getOneProperty(@Path("id") String id);
+    Call<ResponseContainerNoList<Propiedad>> getOneProperty(@Path("id") String id);
 
 
 
