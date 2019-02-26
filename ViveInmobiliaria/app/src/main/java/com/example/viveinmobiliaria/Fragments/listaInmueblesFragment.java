@@ -15,9 +15,11 @@ import android.widget.Toast;
 import com.example.viveinmobiliaria.Adapters.MylistaInmueblesRecyclerViewAdapter;
 import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
+import com.example.viveinmobiliaria.Model.Photo;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.R;
+import com.example.viveinmobiliaria.Services.PhotoService;
 import com.example.viveinmobiliaria.Services.PropertiesService;
 
 import java.util.ArrayList;
@@ -82,7 +84,7 @@ public class listaInmueblesFragment extends Fragment {
             }
                 listaPropiedades = new ArrayList<>();
 
-                PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
+                final PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
                 Call<ResponseContainer<Propiedad>> call = service.getProperties();
 
                 call.enqueue(new Callback<ResponseContainer<Propiedad>>() {

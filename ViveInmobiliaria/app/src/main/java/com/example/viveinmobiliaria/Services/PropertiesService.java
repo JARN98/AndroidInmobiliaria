@@ -23,7 +23,8 @@ public interface PropertiesService {
     @POST("/properties/fav/{id}")
     Call<addFavouriteDto> addFavPropertie(@Path("id") String id);
 
-
+    @GET("/properties/{id}")
+    Call<ResponseContainer<Propiedad>> getOneProperty(@Path("id") String id);
 
 
 

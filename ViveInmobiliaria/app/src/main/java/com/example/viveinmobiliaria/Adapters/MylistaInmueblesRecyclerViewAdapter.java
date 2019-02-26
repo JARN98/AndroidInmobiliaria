@@ -2,6 +2,7 @@ package com.example.viveinmobiliaria.Adapters;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,9 @@ import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Generator.UtilUser;
+import com.example.viveinmobiliaria.InmuebleDetallado;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
+import com.example.viveinmobiliaria.Model.Photo;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.Model.addFavouriteDto;
@@ -35,6 +38,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
     private final List<Propiedad> mValues;
     private final InmueblesListener mListener;
     private Context contexto;
+    private Photo photo;
 
     public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener) {
         contexto = cxt;
@@ -42,7 +46,12 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         mListener = listener;
     }
 
-
+    public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener, Photo foto) {
+        contexto = cxt;
+        mValues = items;
+        mListener = listener;
+        photo = foto;
+    }
 
 
     @Override
@@ -53,7 +62,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         /*if(mValues.get(position).getCategoryId() != null) {
             holder.textView_category.setText(mValues.get(position).getCategoryId());
@@ -91,10 +100,19 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             }
         });
 
-        /*Glide
-                .with(this.contexto)
-                .load(holder.mItem.getP)
-                .into(holder.imageView);*/
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(contexto, InmuebleDetallado.class);
+                i.putExtra("id", mValues.get(position).getId());
+                contexto.startActivity(i);
+            }
+        });
+
+        Glide
+                .with(contexto)
+                .load(mValues.get(position).getPhotos().get(0))
+                .into(holder.imageView);
 
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +135,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView textView_category, textView_title, textView_price, textView_rooms, textView_size, textView_direccion, textView_ciudad;
-        public final ImageView imageView_fav;
+        public final ImageView imageView_fav, imageView;
         public Propiedad mItem;
 
         public ViewHolder(View view) {
@@ -130,6 +148,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             textView_size = view.findViewById(R.id.textView_size);
             textView_direccion = view.findViewById(R.id.textView_direccion);
             textView_ciudad = view.findViewById(R.id.textView_ciudad);
+            imageView = view.findViewById(R.id.imageView);
             imageView_fav = view.findViewById(R.id.imageView_fav);
 
         }

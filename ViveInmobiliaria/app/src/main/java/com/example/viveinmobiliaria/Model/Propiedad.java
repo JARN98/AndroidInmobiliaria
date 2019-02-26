@@ -1,22 +1,25 @@
 package com.example.viveinmobiliaria.Model;
 
+import java.util.List;
+
 public class Propiedad {
-    private String title;
-    private String description;
-    private double price;
-    private int rooms;
-    private String address;
-    private String zipcode;
-    private String city;
-    private String province;
-    private String loc;
-    private Owner ownerId;
-    private String id;
+    public String title;
+    public String description;
+    public Integer price;
+    public Integer rooms;
+    public String address;
+    public String zipcode;
+    public String city;
+    public String province;
+    public String loc;
+    public OwnerId ownerId;
+    public String createdAt;
+    public String updatedAt;
+    public Integer v;
+    public String id;
+    public List<String> photos = null;
 
-    public Propiedad() {
-    }
-
-    public Propiedad(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, Owner ownerId, String id) {
+    public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, List<String> photos) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -27,7 +30,11 @@ public class Propiedad {
         this.province = province;
         this.loc = loc;
         this.ownerId = ownerId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.v = v;
         this.id = id;
+        this.photos = photos;
     }
 
     public String getTitle() {
@@ -46,19 +53,19 @@ public class Propiedad {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public int getRooms() {
+    public Integer getRooms() {
         return rooms;
     }
 
-    public void setRooms(int rooms) {
+    public void setRooms(Integer rooms) {
         this.rooms = rooms;
     }
 
@@ -102,12 +109,36 @@ public class Propiedad {
         this.loc = loc;
     }
 
-    public Owner getOwnerId() {
+    public OwnerId getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(Owner ownerId) {
+    public void setOwnerId(OwnerId ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getV() {
+        return v;
+    }
+
+    public void setV(Integer v) {
+        this.v = v;
     }
 
     public String getId() {
@@ -118,6 +149,14 @@ public class Propiedad {
         this.id = id;
     }
 
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -125,11 +164,11 @@ public class Propiedad {
 
         Propiedad propiedad = (Propiedad) o;
 
-        if (Double.compare(propiedad.price, price) != 0) return false;
-        if (rooms != propiedad.rooms) return false;
         if (title != null ? !title.equals(propiedad.title) : propiedad.title != null) return false;
         if (description != null ? !description.equals(propiedad.description) : propiedad.description != null)
             return false;
+        if (price != null ? !price.equals(propiedad.price) : propiedad.price != null) return false;
+        if (rooms != null ? !rooms.equals(propiedad.rooms) : propiedad.rooms != null) return false;
         if (address != null ? !address.equals(propiedad.address) : propiedad.address != null)
             return false;
         if (zipcode != null ? !zipcode.equals(propiedad.zipcode) : propiedad.zipcode != null)
@@ -140,52 +179,42 @@ public class Propiedad {
         if (loc != null ? !loc.equals(propiedad.loc) : propiedad.loc != null) return false;
         if (ownerId != null ? !ownerId.equals(propiedad.ownerId) : propiedad.ownerId != null)
             return false;
-        return id != null ? id.equals(propiedad.id) : propiedad.id == null;
+        if (createdAt != null ? !createdAt.equals(propiedad.createdAt) : propiedad.createdAt != null)
+            return false;
+        if (updatedAt != null ? !updatedAt.equals(propiedad.updatedAt) : propiedad.updatedAt != null)
+            return false;
+        if (v != null ? !v.equals(propiedad.v) : propiedad.v != null) return false;
+        if (id != null ? !id.equals(propiedad.id) : propiedad.id != null) return false;
+        return photos != null ? photos.equals(propiedad.photos) : propiedad.photos == null;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = title != null ? title.hashCode() : 0;
+        int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        temp = Double.doubleToLongBits(price);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + rooms;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (rooms != null ? rooms.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (zipcode != null ? zipcode.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (province != null ? province.hashCode() : 0);
         result = 31 * result + (loc != null ? loc.hashCode() : 0);
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        result = 31 * result + (v != null ? v.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (photos != null ? photos.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Propiedad{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", rooms=" + rooms +
-                ", address='" + address + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                ", city='" + city + '\'' +
-                ", province='" + province + '\'' +
-                ", loc='" + loc + '\'' +
-                ", ownerId=" + ownerId +
-                ", id='" + id + '\'' +
-                '}';
     }
 }
 
-class Owner {
+class OwnerId {
     private String id;
     private String picture;
     private String name;
 
-    public Owner(String id, String picture, String name) {
+    public OwnerId(String id, String picture, String name) {
         this.id = id;
         this.picture = picture;
         this.name = name;
