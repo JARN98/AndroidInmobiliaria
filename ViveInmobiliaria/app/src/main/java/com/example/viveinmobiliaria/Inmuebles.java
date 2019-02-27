@@ -121,7 +121,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
 
         ocultarBotonesParaAnonimos(menu);
 
-        MenuItem inicio = menu.findItem(R.id.navigation_dashboard);
+        MenuItem inicio = menu.findItem(R.id.navigation_home);
         inicio.setChecked(true);
     }
 

@@ -83,14 +83,14 @@ public class listaInmueblesFavoritos extends Fragment {
             listaPropiedadesFavoritas = new ArrayList<>();
 
 
-            llamadaALaListaSinAuth(recyclerView);
+            llamadaALaLista(recyclerView);
 
 
         }
         return view;
     }
 
-    private void llamadaALaListaSinAuth(final RecyclerView recyclerView) {
+    private void llamadaALaLista(final RecyclerView recyclerView) {
         PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(getContext()), TipoAutenticacion.JWT);
         Call<ResponseContainer<Propiedad>> call = service.getFavProperties();
 
@@ -105,7 +105,8 @@ public class listaInmueblesFavoritos extends Fragment {
                     adapter = new MylistaInmueblesRecyclerViewAdapter(
                             cxt,
                             listaPropiedadesFavoritas,
-                            mListener
+                            mListener,
+                            true
                     );
                     recyclerView.setAdapter(adapter);
                 }

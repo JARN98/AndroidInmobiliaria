@@ -42,21 +42,8 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
     private Photo photo;
     private List<PropiedaFavoritasDto> valores = null;
     private boolean favorito;
+    private boolean fragmentoFav;
 
-
-    public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener, Photo foto) {
-        contexto = cxt;
-        mValues = items;
-        mListener = listener;
-        photo = foto;
-    }
-
-    public MylistaInmueblesRecyclerViewAdapter(Context cxt, InmueblesListener listener, Photo foto, List<PropiedaFavoritasDto> objetos) {
-        contexto = cxt;
-        valores = objetos;
-        mListener = listener;
-        photo = foto;
-    }
 
     public MylistaInmueblesRecyclerViewAdapter(Context cxt, InmueblesListener listener, List<PropiedaFavoritasDto> objetos) {
         contexto = cxt;
@@ -68,6 +55,13 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         contexto = cxt;
         mValues = items;
         mListener = listener;
+    }
+
+    public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener, boolean fragmentoDeFavoritos) {
+        contexto = cxt;
+        mValues = items;
+        mListener = listener;
+        fragmentoFav = fragmentoDeFavoritos;
     }
 
 
@@ -88,17 +82,6 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             eventsMine(holder, position);
         }
 
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    /*mListener.verCasa(holder.mItem);*/
-                }
-            }
-        });
     }
 
     private void eventsMine(final ViewHolder holder, final int position) {
@@ -147,10 +130,14 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
 
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        Glide
-                .with(contexto)
-                .load(valores.get(position).getPhotos()[0])
-                .into(holder.imageView);
+        if(valores.get(position).getPhotos() != null) {
+            Glide
+                    .with(contexto)
+                    .load(valores.get(position).getPhotos()[0])
+                    .into(holder.imageView);
+        }
+
+
     }
 
     private void eventsNormal(final ViewHolder holder, final int position) {
@@ -165,10 +152,16 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         } else {
             favorito = mValues.get(position).isFav();
 
+            if (favorito || fragmentoFav) {
+                holder.imageView_fav.setImageResource(R.drawable.ic_star_black_24dp);
+            } else {
+                holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+            }
+
             holder.imageView_fav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (favorito) {
+                    if (favorito || fragmentoFav) {
                         eventoOnClickCuandoEsFav(holder);
                     } else {
                         eventoOnClickCuandoNoEsFav(holder);
@@ -191,10 +184,12 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
 
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        Glide
-                .with(contexto)
-                .load(mValues.get(position).getPhotos()[0])
-                .into(holder.imageView);
+        if(mValues.get(position).getPhotos() != null) {
+            Glide
+                    .with(contexto)
+                    .load(mValues.get(position).getPhotos()[0])
+                    .into(holder.imageView);
+        }
     }
 
     private void eventoOnClickCuandoEsFav(final ViewHolder holder) {
@@ -204,8 +199,9 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         call.enqueue(new Callback<addFavouriteDto>() {
             @Override
             public void onResponse(Call<addFavouriteDto> call, Response<addFavouriteDto> response) {
-                if (response.code() == 204) {
+                if (response.code() == 200) {
                     holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+                    Toast.makeText(contexto, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
                 }
@@ -230,8 +226,8 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             @Override
             public void onResponse(Call<addFavouriteDto> call, Response<addFavouriteDto> response) {
                 if (response.code() == 200) {
-                    holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
-
+                    holder.imageView_fav.setImageResource(R.drawable.ic_star_black_24dp);
+                    Toast.makeText(contexto, "Añadido a favoritos", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
                 }
