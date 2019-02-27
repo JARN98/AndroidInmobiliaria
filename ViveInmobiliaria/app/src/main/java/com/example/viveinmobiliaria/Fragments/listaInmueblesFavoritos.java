@@ -16,6 +16,7 @@ import com.example.viveinmobiliaria.Adapters.MylistaInmueblesRecyclerViewAdapter
 import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
+import com.example.viveinmobiliaria.Generator.UtilUser;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
@@ -81,35 +82,41 @@ public class listaInmueblesFavoritos extends Fragment {
 
             listaPropiedadesFavoritas = new ArrayList<>();
 
-            PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(getContext()), TipoAutenticacion.JWT);
-            Call<ResponseContainer<Propiedad>> call = service.getFavProperties();
 
-            call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
-                @Override
-                public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
-                    if (response.code() != 200) {
-                        Toast.makeText(getActivity(), "Error en petición", Toast.LENGTH_SHORT).show();
-                    } else {
-                        listaPropiedadesFavoritas = response.body().getRows();
+            llamadaALaListaSinAuth(recyclerView);
 
-                        adapter = new MylistaInmueblesRecyclerViewAdapter(
-                                cxt,
-                                listaPropiedadesFavoritas,
-                                mListener
-                        );
-                        recyclerView.setAdapter(adapter);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
-                    Log.e("NetworkFailure", t.getMessage());
-                    Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_SHORT).show();
-                }
-            });
 
         }
         return view;
+    }
+
+    private void llamadaALaListaSinAuth(final RecyclerView recyclerView) {
+        PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(getContext()), TipoAutenticacion.JWT);
+        Call<ResponseContainer<Propiedad>> call = service.getFavProperties();
+
+        call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
+            @Override
+            public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
+                if (response.code() != 200) {
+                    Toast.makeText(getActivity(), "Error en petición", Toast.LENGTH_SHORT).show();
+                } else {
+                    listaPropiedadesFavoritas = response.body().getRows();
+
+                    adapter = new MylistaInmueblesRecyclerViewAdapter(
+                            cxt,
+                            listaPropiedadesFavoritas,
+                            mListener
+                    );
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

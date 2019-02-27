@@ -1,11 +1,13 @@
 package com.example.viveinmobiliaria.Services;
 
+import com.example.viveinmobiliaria.Model.PropiedaFavoritasDto;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.Model.ResponseContainerNoList;
 import com.example.viveinmobiliaria.Model.addFavouriteDto;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -18,11 +20,17 @@ public interface PropertiesService {
     @GET("/properties/fav")
     Call<ResponseContainer<Propiedad>> getFavProperties();
 
+    @GET("/properties/auth")
+    Call<ResponseContainer<Propiedad>> getAuthProperties();
+
     @GET("/properties/mine")
-    Call<ResponseContainer<Propiedad>> getMineProperties();
+    Call<ResponseContainer<PropiedaFavoritasDto>> getMineProperties();
 
     @POST("/properties/fav/{id}")
     Call<addFavouriteDto> addFavPropertie(@Path("id") String id);
+
+    @DELETE("/properties/fav/{id}")
+    Call<addFavouriteDto> removeFavPropertie(@Path("id") String id);
 
     @GET("/properties/{id}")
     Call<ResponseContainerNoList<Propiedad>> getOneProperty(@Path("id") String id);

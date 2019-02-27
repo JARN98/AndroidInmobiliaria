@@ -17,6 +17,7 @@ import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
+import com.example.viveinmobiliaria.Model.PropiedaFavoritasDto;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.R;
@@ -37,7 +38,7 @@ public class listaInmueblesDelUsuarioFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private InmueblesListener mListener;
-    private List<Propiedad> listaPropiedadesDelUsuario;
+    private List<PropiedaFavoritasDto> listaPropiedadesDelUsuario;
     private MylistaInmueblesRecyclerViewAdapter adapter;
     private Context cxt;
 
@@ -85,11 +86,11 @@ public class listaInmueblesDelUsuarioFragment extends Fragment {
             listaPropiedadesDelUsuario = new ArrayList<>();
 
             PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(getContext()), TipoAutenticacion.JWT);
-            Call<ResponseContainer<Propiedad>> call = service.getMineProperties();
+            Call<ResponseContainer<PropiedaFavoritasDto>> call = service.getMineProperties();
 
-            call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
+            call.enqueue(new Callback<ResponseContainer<PropiedaFavoritasDto>>() {
                 @Override
-                public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
+                public void onResponse(Call<ResponseContainer<PropiedaFavoritasDto>> call, Response<ResponseContainer<PropiedaFavoritasDto>> response) {
                     if (response.code() != 200) {
                         Toast.makeText(getActivity(), "Error en petición", Toast.LENGTH_SHORT).show();
                     } else {
@@ -97,15 +98,15 @@ public class listaInmueblesDelUsuarioFragment extends Fragment {
 
                         adapter = new MylistaInmueblesRecyclerViewAdapter(
                                 cxt,
-                                listaPropiedadesDelUsuario,
-                                mListener
+                                mListener,
+                                listaPropiedadesDelUsuario
                         );
                         recyclerView.setAdapter(adapter);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
+                public void onFailure(Call<ResponseContainer<PropiedaFavoritasDto>> call, Throwable t) {
                     Log.e("NetworkFailure", t.getMessage());
                     Toast.makeText(getActivity(), "Error de conexión", Toast.LENGTH_SHORT).show();
                 }

@@ -1,5 +1,8 @@
 package com.example.viveinmobiliaria.Model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PropiedaFavoritasDto {
     private String title;
     private String description;
@@ -12,8 +15,9 @@ public class PropiedaFavoritasDto {
     private String loc;
     private String ownerId;
     private String id;
+    private String[] photos;
 
-    public PropiedaFavoritasDto(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, String ownerId, String id) {
+    public PropiedaFavoritasDto(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, String ownerId, String id, String[] photos) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -25,6 +29,7 @@ public class PropiedaFavoritasDto {
         this.loc = loc;
         this.ownerId = ownerId;
         this.id = id;
+        this.photos = photos;
     }
 
     public String getTitle() {
@@ -115,6 +120,14 @@ public class PropiedaFavoritasDto {
         this.id = id;
     }
 
+    public String[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String[] photos) {
+        this.photos = photos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -134,7 +147,9 @@ public class PropiedaFavoritasDto {
             return false;
         if (loc != null ? !loc.equals(that.loc) : that.loc != null) return false;
         if (ownerId != null ? !ownerId.equals(that.ownerId) : that.ownerId != null) return false;
-        return id != null ? id.equals(that.id) : that.id == null;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(photos, that.photos);
     }
 
     @Override
@@ -153,23 +168,7 @@ public class PropiedaFavoritasDto {
         result = 31 * result + (loc != null ? loc.hashCode() : 0);
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(photos);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "PropiedaFavoritasDto{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", rooms=" + rooms +
-                ", address='" + address + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                ", city='" + city + '\'' +
-                ", province='" + province + '\'' +
-                ", loc='" + loc + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", id='" + id + '\'' +
-                '}';
     }
 }

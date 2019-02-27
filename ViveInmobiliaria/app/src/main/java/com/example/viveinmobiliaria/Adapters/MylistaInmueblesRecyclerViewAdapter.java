@@ -20,6 +20,7 @@ import com.example.viveinmobiliaria.Generator.UtilUser;
 import com.example.viveinmobiliaria.InmuebleDetallado;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
 import com.example.viveinmobiliaria.Model.Photo;
+import com.example.viveinmobiliaria.Model.PropiedaFavoritasDto;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.Model.addFavouriteDto;
@@ -35,22 +36,38 @@ import retrofit2.Response;
 
 public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<MylistaInmueblesRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Propiedad> mValues;
+    private List<Propiedad> mValues = null;
     private final InmueblesListener mListener;
     private Context contexto;
     private Photo photo;
+    private List<PropiedaFavoritasDto> valores = null;
+    private boolean favorito;
 
-    public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener) {
-        contexto = cxt;
-        mValues = items;
-        mListener = listener;
-    }
 
     public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener, Photo foto) {
         contexto = cxt;
         mValues = items;
         mListener = listener;
         photo = foto;
+    }
+
+    public MylistaInmueblesRecyclerViewAdapter(Context cxt, InmueblesListener listener, Photo foto, List<PropiedaFavoritasDto> objetos) {
+        contexto = cxt;
+        valores = objetos;
+        mListener = listener;
+        photo = foto;
+    }
+
+    public MylistaInmueblesRecyclerViewAdapter(Context cxt, InmueblesListener listener, List<PropiedaFavoritasDto> objetos) {
+        contexto = cxt;
+        valores = objetos;
+        mListener = listener;
+    }
+
+    public MylistaInmueblesRecyclerViewAdapter(Context cxt, List<Propiedad> items, InmueblesListener listener) {
+        contexto = cxt;
+        mValues = items;
+        mListener = listener;
     }
 
 
@@ -63,21 +80,40 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mItem = mValues.get(position);
-        /*if(mValues.get(position).getCategoryId() != null) {
-            holder.textView_category.setText(mValues.get(position).getCategoryId());
-        }*/
-        holder.textView_price.setText(mValues.get(position).getPrice() + " €");
-        holder.textView_title.setText(mValues.get(position).getTitle());
-        holder.textView_rooms.setText(mValues.get(position).getRooms() + " habs");
-        holder.textView_direccion.setText(mValues.get(position).getAddress());
-        holder.textView_ciudad.setText(mValues.get(position).getCity() + " - " + mValues.get(position).getProvince());
+        if (mValues != null) {
+            holder.mItem = mValues.get(position);
+            eventsNormal(holder, position);
+        } else {
+            holder.item = valores.get(position);
+            eventsMine(holder, position);
+        }
+
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    /*mListener.verCasa(holder.mItem);*/
+                }
+            }
+        });
+    }
+
+    private void eventsMine(final ViewHolder holder, final int position) {
+
+        holder.textView_price.setText(valores.get(position).getPrice() + " €");
+        holder.textView_title.setText(valores.get(position).getTitle());
+        holder.textView_rooms.setText(valores.get(position).getRooms() + " habs");
+        holder.textView_direccion.setText(valores.get(position).getAddress());
+        holder.textView_ciudad.setText(valores.get(position).getCity() + " - " + valores.get(position).getProvince());
         holder.imageView_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(contexto), TipoAutenticacion.JWT);
-                Call<addFavouriteDto> call = service.addFavPropertie(holder.mItem.getId());
+                Call<addFavouriteDto> call = service.addFavPropertie(holder.item.getId());
 
                 call.enqueue(new Callback<addFavouriteDto>() {
                     @Override
@@ -109,27 +145,115 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             }
         });
 
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        Glide
+                .with(contexto)
+                .load(valores.get(position).getPhotos()[0])
+                .into(holder.imageView);
+    }
+
+    private void eventsNormal(final ViewHolder holder, final int position) {
+
+        holder.textView_price.setText(mValues.get(position).getPrice() + " €");
+        holder.textView_title.setText(mValues.get(position).getTitle());
+        holder.textView_rooms.setText(mValues.get(position).getRooms() + " habs");
+        holder.textView_direccion.setText(mValues.get(position).getAddress());
+        holder.textView_ciudad.setText(mValues.get(position).getCity() + " - " + mValues.get(position).getProvince());
+        if (UtilUser.getEmail(contexto) == null) {
+            holder.imageView_fav.setVisibility(View.GONE);
+        } else {
+            favorito = mValues.get(position).isFav();
+
+            holder.imageView_fav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favorito) {
+                        eventoOnClickCuandoEsFav(holder);
+                    } else {
+                        eventoOnClickCuandoNoEsFav(holder);
+                    }
+                }
+            });
+
+
+        }
+
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(contexto, InmuebleDetallado.class);
+                i.putExtra("id", mValues.get(position).getId());
+                contexto.startActivity(i);
+            }
+        });
+
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         Glide
                 .with(contexto)
                 .load(mValues.get(position).getPhotos()[0])
                 .into(holder.imageView);
+    }
 
+    private void eventoOnClickCuandoEsFav(final ViewHolder holder) {
+        PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(contexto), TipoAutenticacion.JWT);
+        Call<addFavouriteDto> call = service.removeFavPropertie(holder.mItem.getId());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        call.enqueue(new Callback<addFavouriteDto>() {
             @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    /*mListener.verCasa(holder.mItem);*/
+            public void onResponse(Call<addFavouriteDto> call, Response<addFavouriteDto> response) {
+                if (response.code() == 204) {
+                    holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+                } else {
+                    Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void onFailure(Call<addFavouriteDto> call, Throwable t) {
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(contexto, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
         });
+        favorito = !favorito;
+
+    }
+
+    private void eventoOnClickCuandoNoEsFav(final ViewHolder holder) {
+
+        PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(contexto), TipoAutenticacion.JWT);
+        Call<addFavouriteDto> call = service.addFavPropertie(holder.mItem.getId());
+
+        call.enqueue(new Callback<addFavouriteDto>() {
+            @Override
+            public void onResponse(Call<addFavouriteDto> call, Response<addFavouriteDto> response) {
+                if (response.code() == 200) {
+                    holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+
+                } else {
+                    Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<addFavouriteDto> call, Throwable t) {
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(contexto, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
+        favorito = !favorito;
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues != null) {
+            return mValues.size();
+        } else {
+            return valores.size();
+        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -137,6 +261,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         public final TextView textView_category, textView_title, textView_price, textView_rooms, textView_size, textView_direccion, textView_ciudad;
         public final ImageView imageView_fav, imageView;
         public Propiedad mItem;
+        public PropiedaFavoritasDto item;
 
         public ViewHolder(View view) {
             super(view);

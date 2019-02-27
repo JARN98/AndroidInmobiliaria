@@ -42,18 +42,21 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesFragment())
                             .commit();
+                    fab.show();
                     return true;
                 case R.id.navigation_dashboard:
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesFavoritos())
                             .commit();
+                    fab.show();
                     return true;
                 case R.id.navigation_notifications:
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesDelUsuarioFragment())
                             .commit();
+                    fab.show();
                     return true;
                 case R.id.navigation_cuenta:
                     if(UtilUser.getEmail(Inmuebles.this) == null) {

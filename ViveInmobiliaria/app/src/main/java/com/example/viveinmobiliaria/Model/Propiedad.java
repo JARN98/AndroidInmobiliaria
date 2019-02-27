@@ -1,5 +1,6 @@
 package com.example.viveinmobiliaria.Model;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Propiedad {
@@ -18,8 +19,9 @@ public class Propiedad {
     public Integer v;
     public String id;
     public String[] photos = null;
+    public boolean isFav;
 
-    public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, String[] photos) {
+    public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, String[] photos, boolean isFav) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -35,6 +37,7 @@ public class Propiedad {
         this.v = v;
         this.id = id;
         this.photos = photos;
+        this.isFav = isFav;
     }
 
     public String getTitle() {
@@ -157,6 +160,14 @@ public class Propiedad {
         this.photos = photos;
     }
 
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,6 +175,7 @@ public class Propiedad {
 
         Propiedad propiedad = (Propiedad) o;
 
+        if (isFav != propiedad.isFav) return false;
         if (title != null ? !title.equals(propiedad.title) : propiedad.title != null) return false;
         if (description != null ? !description.equals(propiedad.description) : propiedad.description != null)
             return false;
@@ -185,7 +197,8 @@ public class Propiedad {
             return false;
         if (v != null ? !v.equals(propiedad.v) : propiedad.v != null) return false;
         if (id != null ? !id.equals(propiedad.id) : propiedad.id != null) return false;
-        return photos != null ? photos.equals(propiedad.photos) : propiedad.photos == null;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(photos, propiedad.photos);
     }
 
     @Override
@@ -204,7 +217,8 @@ public class Propiedad {
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
         result = 31 * result + (v != null ? v.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (photos != null ? photos.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(photos);
+        result = 31 * result + (isFav ? 1 : 0);
         return result;
     }
 }
