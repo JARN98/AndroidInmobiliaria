@@ -28,4 +28,22 @@
     <string name="dialog_title">¿Quieres cerrar sesión?</string>
     <string name="ok">Salir</string>
     <string name="cancel">Cancelar</string>
+    <string name="titulo_propiedad">Título*</string>
+    <string name="descripcion_propiedad">Descripción*</string>
+    <string name="ready_bt_label">Hecho</string>
+    <string name="region_dialog">Región: </string>
+    <string name="province_dialog">Provincia: </string>
+    <string name="city_dialog">Ciudad: </string>
+    <string name="list_title">Title</string>
+    <string name="price">Price</string>
+    <string name="size">Size</string>
+    <string name="city">Ciudad</string>
+    <string name="province">Provincia</string>
+    <string name="button_choosecity">Ubicación</string>
+    <string name="editText_price_create">Precio*</string>
+    <string name="editText_CP_create">Código Postal*</string>
+    <string name="editText_direccion_create">Dirección*</string>
+    <string name="editText_habitaciones_create">Nº Habitaciones*</string>
+    <string name="button_create_inmueble">Subir Inmueble</string>
+    <string name="tituloCreate">Subiendo Inmueble</string>
 </resources>

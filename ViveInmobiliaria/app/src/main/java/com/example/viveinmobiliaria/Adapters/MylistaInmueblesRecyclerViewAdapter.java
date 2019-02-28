@@ -161,10 +161,13 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             holder.imageView_fav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    favorito = mValues.get(position).isFav();
                     if (favorito || fragmentoFav) {
                         eventoOnClickCuandoEsFav(holder);
+                        mValues.get(position).setFav(false);
                     } else {
                         eventoOnClickCuandoNoEsFav(holder);
+                        mValues.get(position).setFav(true);
                     }
                 }
             });
@@ -202,6 +205,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
                 if (response.code() == 200) {
                     holder.imageView_fav.setImageResource(R.drawable.ic_star_border_yellow_24dp);
                     Toast.makeText(contexto, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                    favorito = !favorito;
                 } else {
                     Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
                 }
@@ -213,7 +217,6 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
                 Toast.makeText(contexto, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
-        favorito = !favorito;
 
     }
 
@@ -228,6 +231,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
                 if (response.code() == 200) {
                     holder.imageView_fav.setImageResource(R.drawable.ic_star_black_24dp);
                     Toast.makeText(contexto, "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                    favorito = !favorito;
                 } else {
                     Toast.makeText(contexto, "Error en petición", Toast.LENGTH_SHORT).show();
                 }
@@ -239,7 +243,6 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
                 Toast.makeText(contexto, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
-        favorito = !favorito;
     }
 
     @Override

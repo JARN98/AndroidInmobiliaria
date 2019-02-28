@@ -29,8 +29,7 @@
         android:src="@drawable/ic_add_white_35dp"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/contenedor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="@dimen/tamanio_icono" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
         android:id="@+id/contenedor"

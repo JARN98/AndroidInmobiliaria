@@ -60,7 +60,8 @@ public class InmuebleDetallado extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseContainerNoList<Propiedad>> call, Throwable t) {
-
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(InmuebleDetallado.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }
