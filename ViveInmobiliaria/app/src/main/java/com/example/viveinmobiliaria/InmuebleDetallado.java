@@ -1,16 +1,21 @@
 package com.example.viveinmobiliaria;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.viveinmobiliaria.Adapters.ImageAdapter;
 import com.example.viveinmobiliaria.Generator.ServiceGenerator;
+import com.example.viveinmobiliaria.Generator.UtilUser;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.Model.ResponseContainerNoList;
@@ -30,6 +35,8 @@ public class InmuebleDetallado extends AppCompatActivity {
     MapView mapView;
     Propiedad propiedad;
     private List<String> imagenes;
+    private FloatingActionButton floatingActionButtonEdit;
+    private MenuItem editPhotos;
 
 
     @Override
@@ -37,11 +44,20 @@ public class InmuebleDetallado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inmueble_detallado);
 
+        findsId();
+
+        events();
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         Intent intent = getIntent();
 
         String id = intent.getStringExtra("id");
-
-        findsId();
 
         PropertiesService propertiesService = ServiceGenerator.createService(PropertiesService.class);
 
@@ -66,6 +82,35 @@ public class InmuebleDetallado extends AppCompatActivity {
         });
     }
 
+    private void events() {
+
+        floatingActionButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(InmuebleDetallado.this, CrearInmueble.class);
+                i.putExtra("idpropiedad", propiedad.getId());
+                startActivity(i);
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_editarPhoto:
+                Intent i = new Intent(InmuebleDetallado.this, EditarPhoto.class);
+                i.putExtra("id", propiedad.getId());
+                startActivity(i);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void sets() {
         textView_descripcion.setText(propiedad.getDescription());
         textView_city_detalle.setText(propiedad.getCity() + " - " + propiedad.getProvince());
@@ -75,6 +120,12 @@ public class InmuebleDetallado extends AppCompatActivity {
         imagenes = Arrays.asList(propiedad.getPhotos());
 
         ImageAdapter imageAdapter = new ImageAdapter(InmuebleDetallado.this, imagenes);
+
+/*        if (UtilUser.getId(this) != null) {
+            if (!UtilUser.getId(this).equals(propiedad.getOwnerId())) {
+                floatingActionButtonEditPhoto.hide();
+            }
+        }*/
 
         viewPager.setAdapter(imageAdapter);
     }
@@ -86,6 +137,15 @@ public class InmuebleDetallado extends AppCompatActivity {
         textView_city_detalle = findViewById(R.id.textView_city_detalle);
         textView_price_detalle = findViewById(R.id.textView_price_detalle);
         textView_descripcion = findViewById(R.id.textView_descripcion);
+        floatingActionButtonEdit= findViewById(R.id.floatingActionButtonEditPhoto);
+        editPhotos = findViewById(R.id.action_editarPhoto);
 
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
     }
 }

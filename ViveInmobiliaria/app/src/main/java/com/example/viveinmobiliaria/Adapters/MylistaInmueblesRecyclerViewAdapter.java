@@ -123,7 +123,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(contexto, InmuebleDetallado.class);
-                i.putExtra("id", mValues.get(position).getId());
+                i.putExtra("id", valores.get(position).getId());
                 contexto.startActivity(i);
             }
         });

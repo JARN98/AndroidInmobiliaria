@@ -116,7 +116,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         super.onStart();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.contenedor, new listaInmueblesFragment())
+                .replace(R.id.contenedor, new listaInmueblesFragment())
                 .commit();
 
         ocultarBotonesParaAnonimos(menu);
