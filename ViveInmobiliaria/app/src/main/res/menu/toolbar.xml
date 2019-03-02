@@ -4,7 +4,17 @@
 
     <item
         android:id="@+id/action_editarPhoto"
-        android:icon="@drawable/ic_edit_white_24dp"
+        android:icon="@drawable/ic_photo_library_black_30dp"
         android:title="@string/action_editPhoto"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_editarPropiedad"
+        android:icon="@drawable/ic_edit_white_24dp"
+        android:title="@string/action_editarPropiedad"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_eliminarPropiedad"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="@string/action_eliminarPropiedad"
         app:showAsAction="ifRoom" />
 </menu>

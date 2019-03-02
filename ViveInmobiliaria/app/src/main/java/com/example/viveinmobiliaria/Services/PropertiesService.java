@@ -15,8 +15,13 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface PropertiesService {
+
+    @GET("/properties")
+    Call<ResponseContainer<Propiedad>> getPropertiesNear(@Query("near") String near);
+
     @GET("/properties")
     Call<ResponseContainer<Propiedad>> getProperties();
 
@@ -43,6 +48,9 @@ public interface PropertiesService {
 
     @PUT("/properties/{id}")
     Call<CrearPropiedadResponse> editProperty(@Path("id") String id, @Body CrearPropiedadDto crearPropiedadDto);
+
+    @DELETE("/properties/{id}")
+    Call<ResponseContainerNoList<Propiedad>> deleteProperty(@Path("id") String id);
 
 
 }

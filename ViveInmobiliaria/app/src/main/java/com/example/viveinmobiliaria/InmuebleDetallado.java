@@ -2,6 +2,7 @@ package com.example.viveinmobiliaria;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.viveinmobiliaria.Adapters.ImageAdapter;
 import com.example.viveinmobiliaria.Generator.ServiceGenerator;
+import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
+import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Generator.UtilUser;
 import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Model.ResponseContainer;
@@ -35,8 +38,10 @@ public class InmuebleDetallado extends AppCompatActivity {
     MapView mapView;
     Propiedad propiedad;
     private List<String> imagenes;
-    private FloatingActionButton floatingActionButtonEdit;
     private MenuItem editPhotos;
+    private String id;
+    private Menu menu;
+    private MenuItem action_editarPhoto, action_editarPropiedad, action_eliminarPropiedad;
 
 
     @Override
@@ -45,8 +50,6 @@ public class InmuebleDetallado extends AppCompatActivity {
         setContentView(R.layout.activity_inmueble_detallado);
 
         findsId();
-
-        events();
 
     }
 
@@ -57,7 +60,7 @@ public class InmuebleDetallado extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String id = intent.getStringExtra("id");
+        id = intent.getStringExtra("id");
 
         PropertiesService propertiesService = ServiceGenerator.createService(PropertiesService.class);
 
@@ -70,6 +73,16 @@ public class InmuebleDetallado extends AppCompatActivity {
                     Toast.makeText(InmuebleDetallado.this, "Error al ver Inmueble", Toast.LENGTH_SHORT).show();
                 } else {
                     propiedad = response.body().getRows();
+                    if(UtilUser.getNombre(InmuebleDetallado.this) != null){
+                        if ( UtilUser.getNombre(InmuebleDetallado.this).equals(propiedad.getOwnerIdname())){
+                            /*
+                            Esconder iconos de navbar
+                             */
+
+                            Toast.makeText(InmuebleDetallado.this, "Entra", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                     sets();
                 }
             }
@@ -82,23 +95,13 @@ public class InmuebleDetallado extends AppCompatActivity {
         });
     }
 
-    private void events() {
-
-        floatingActionButtonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(InmuebleDetallado.this, CrearInmueble.class);
-                i.putExtra("idpropiedad", propiedad.getId());
-                startActivity(i);
-            }
-        });
-
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if(UtilUser.getNombre(InmuebleDetallado.this) != null){
+            item.setVisible(false);
+        }
 
         switch (id) {
             case R.id.action_editarPhoto:
@@ -106,9 +109,37 @@ public class InmuebleDetallado extends AppCompatActivity {
                 i.putExtra("id", propiedad.getId());
                 startActivity(i);
                 return true;
+            case R.id.action_editarPropiedad:
+                startActivity(new Intent(InmuebleDetallado.this, CrearInmueble.class).putExtra("idpropiedad", propiedad.getId()));
+                return true;
+            case R.id.action_eliminarPropiedad:
+                eliminarPropiedad();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void eliminarPropiedad() {
+        PropertiesService service = ServiceGenerator.createService(PropertiesService.class, UtilToken.getToken(this), TipoAutenticacion.JWT);
+        Call<ResponseContainerNoList<Propiedad>> call = service.deleteProperty(id);
+
+        call.enqueue(new Callback<ResponseContainerNoList<Propiedad>>() {
+            @Override
+            public void onResponse(Call<ResponseContainerNoList<Propiedad>> call, Response<ResponseContainerNoList<Propiedad>> response) {
+                if (response.code() != 204) {
+                    Toast.makeText(InmuebleDetallado.this, "Fallo al borrar", Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseContainerNoList<Propiedad>> call, Throwable t) {
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(InmuebleDetallado.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sets() {
@@ -137,8 +168,10 @@ public class InmuebleDetallado extends AppCompatActivity {
         textView_city_detalle = findViewById(R.id.textView_city_detalle);
         textView_price_detalle = findViewById(R.id.textView_price_detalle);
         textView_descripcion = findViewById(R.id.textView_descripcion);
-        floatingActionButtonEdit= findViewById(R.id.floatingActionButtonEditPhoto);
         editPhotos = findViewById(R.id.action_editarPhoto);
+        action_eliminarPropiedad = findViewById(R.id.action_eliminarPropiedad);
+        action_editarPhoto = findViewById(R.id.action_editarPhoto);
+        action_editarPropiedad = findViewById(R.id.action_editarPropiedad);
 
 
     }

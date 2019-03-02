@@ -59,8 +59,8 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
                     fab.show();
                     return true;
                 case R.id.navigation_cuenta:
-                    if(UtilUser.getEmail(Inmuebles.this) == null) {
-                        Intent i =  new Intent(Inmuebles.this, SessionActivity.class);
+                    if (UtilUser.getEmail(Inmuebles.this) == null) {
+                        Intent i = new Intent(Inmuebles.this, SessionActivity.class);
                         startActivity(i);
                     } else {
                         getSupportFragmentManager()
@@ -103,6 +103,22 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+
+        switch (id) {
+            case R.id.action_map:
+                Intent i = new Intent(Inmuebles.this, Mapa.class);
+/*                i.putExtra("id", propiedad.getId());*/
+                startActivity(i);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void verCasa(String casa) {
 
     }
@@ -134,5 +150,11 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
 
             fab.hide();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar2, menu);
+        return true;
     }
 }

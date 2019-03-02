@@ -116,6 +116,14 @@ public class Propiedad {
         return ownerId;
     }
 
+    public String getOwnerIdid() {
+        return  ownerId.getId();
+    }
+
+    public String getOwnerIdname() {
+        return  ownerId.getName();
+    }
+
     public void setOwnerId(OwnerId ownerId) {
         this.ownerId = ownerId;
     }

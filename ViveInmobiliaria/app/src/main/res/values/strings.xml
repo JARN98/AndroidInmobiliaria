@@ -47,4 +47,8 @@
     <string name="button_create_inmueble">Subir Inmueble</string>
     <string name="tituloCreate">Subiendo Inmueble</string>
     <string name="action_editPhoto">Editar Imágenes</string>
+    <string name="action_eliminarPropiedad">Eliminar</string>
+    <string name="action_editarPropiedad">Editar</string>
+    <string name="title_activity_mapa">Map</string>
+    <string name="action_map">Mapa</string>
 </resources>
