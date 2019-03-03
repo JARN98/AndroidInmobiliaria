@@ -51,4 +51,21 @@
     <string name="action_editarPropiedad">Editar</string>
     <string name="title_activity_mapa">Map</string>
     <string name="action_map">Mapa</string>
+    <string name="filter">Aplicar filtro</string>
+    <string name="button_filter_cancel">Cancel</string>
+    <string name="title_filter">Filtros</string>
+    <string name="filter_city">Ciudad...</string>
+    <string name="filter_rango_precio">Rango de precio</string>
+    <string name="editText_filter_minprice">Mínimo...</string>
+    <string name="editText_filter_maxprice">Máximo...</string>
+    <string name="textView_lugar">Lugar</string>
+    <string name="editText_filtrar_province">Provincia...</string>
+    <string name="textView_numeroHabitaciones">Número de habitaciones</string>
+    <string name="textView_tamanio">Tamaño</string>
+    <string name="editText_filter_minSize">Ej:50</string>
+    <string name="editText_filtrar_address">Dirección...</string>
+    <string name="textView_ubi">Ubicación</string>
+    <string name="editText_filter_maxdistance">Distancia..</string>
+    <string name="button_filter_myubi">Buscar mi ubicacion</string>
+    <string name="filter_list">Filtrar</string>
 </resources>

@@ -8,14 +8,18 @@ import com.example.viveinmobiliaria.Model.ResponseContainerNoList;
 import com.example.viveinmobiliaria.Model.addFavouriteDto;
 import com.example.viveinmobiliaria.Responses.CrearPropiedadResponse;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface PropertiesService {
 
@@ -51,6 +55,13 @@ public interface PropertiesService {
 
     @DELETE("/properties/{id}")
     Call<ResponseContainerNoList<Propiedad>> deleteProperty(@Path("id") String id);
+
+    @GET("/properties")
+    @Headers("Content-Type:application/x-www-form-urlencoded; charset=utf-8")
+    Call<ResponseContainer<Propiedad>> getProperties(
+            @QueryMap Map<String, String> options
+    );
+
 
 
 }

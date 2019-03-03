@@ -48,7 +48,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ActivityCompat.requestPermissions(Mapa.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        ActivityCompat.requestPermissions(Mapa.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -61,26 +61,25 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 /*            Toast.makeText(this, "Lo siento, no puede ver el mapa", Toast.LENGTH_SHORT).show();
             finish();*/
             return;
-        } else {
-            locManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                loc = location;
-                                LatLng casa = new LatLng(loc.getLatitude(), loc.getLongitude());
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(casa, 13));
-
-                                inmueblesCercanos();
-                            }
-                        }
-                    });
-
         }
+        locManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            loc = location;
+                            LatLng casa = new LatLng(loc.getLatitude(), loc.getLongitude());
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(casa, 13));
+
+                            inmueblesCercanos();
+                        }
+                    }
+                });
+
 
     }
 
@@ -90,18 +89,14 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
 
 
-
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         /*mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
 
-    public void inmueblesCercanos(){
+    public void inmueblesCercanos() {
         PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
-
-        /*Call<ResponseContainer<Propiedad>> call = service.getPropertiesNear("" + loc.getLatitude() +" ," + loc.getLongitude());*/
 
         Call<ResponseContainer<Propiedad>> call1 = service.getProperties();
 
@@ -123,29 +118,10 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
                 Toast.makeText(Mapa.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
-
-/*        call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
-            @Override
-            public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
-                if (response.isSuccessful()) {
-                    propiedades = response.body().getRows();
-
-                    aniadirMarkers(propiedades);
-                } else {
-                    Toast.makeText(Mapa.this, "Fallo al cargar los inmuebles", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
-                Log.e("NetworkFailure", t.getMessage());
-                Toast.makeText(Mapa.this, "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     private void aniadirMarkers(List<Propiedad> propiedades) {
-        for (int i = 0; i < propiedades.size() ; i++) {
+        for (int i = 0; i < propiedades.size(); i++) {
             String[] parts = propiedades.get(i).getLoc().split(",");
             double lat = Double.valueOf(parts[0]);
             double lon = Double.valueOf(parts[1]);

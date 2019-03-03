@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_map_white_24dp"
         android:title="@string/action_map"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/filter_list"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="@string/filter_list"
+        app:showAsAction="ifRoom" />
 </menu>

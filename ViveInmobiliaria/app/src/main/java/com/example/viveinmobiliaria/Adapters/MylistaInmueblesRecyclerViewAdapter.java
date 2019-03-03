@@ -64,6 +64,12 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         fragmentoFav = fragmentoDeFavoritos;
     }
 
+    public void setListaFiltrada(List<Propiedad> listaFiltrada) {
+        this.mValues = listaFiltrada;
+        notifyDataSetChanged();
+    }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
     private ImageView imageView_fav;
     private Menu menu;
     private FloatingActionButton fab;
+    private boolean filtro;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,6 +79,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,9 +91,16 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         contenedor = findViewById(R.id.contenedor);
         fab = findViewById(R.id.fab);
 
+/*        Intent intent = getIntent();
+
+        filtro = intent.getStringExtra("id");*/
+
+
+
         events();
 
     }
+
 
     private void events() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +112,10 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         });
     }
 
+    public boolean isFiltro() {
+        return filtro;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -111,8 +125,11 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         switch (id) {
             case R.id.action_map:
                 Intent i = new Intent(Inmuebles.this, Mapa.class);
-/*                i.putExtra("id", propiedad.getId());*/
                 startActivity(i);
+                return true;
+            case R.id.filter_list:
+                Intent in = new Intent(Inmuebles.this, Filtros.class);
+                startActivity(in);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -136,6 +153,15 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
                 .commit();
 
         ocultarBotonesParaAnonimos(menu);
+
+        Bundle b = new Bundle();
+        b = getIntent().getExtras();
+
+        if (b != null) {
+            if (!b.getString("filtro").isEmpty()) {
+                filtro = true;
+            }
+        }
 
         MenuItem inicio = menu.findItem(R.id.navigation_home);
         inicio.setChecked(true);

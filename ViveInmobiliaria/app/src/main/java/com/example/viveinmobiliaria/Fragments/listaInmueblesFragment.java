@@ -1,7 +1,10 @@
 package com.example.viveinmobiliaria.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Generator.UtilUser;
+import com.example.viveinmobiliaria.Inmuebles;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
 import com.example.viveinmobiliaria.Model.Photo;
 import com.example.viveinmobiliaria.Model.Propiedad;
@@ -24,6 +28,7 @@ import com.example.viveinmobiliaria.Model.ResponseContainer;
 import com.example.viveinmobiliaria.R;
 import com.example.viveinmobiliaria.Services.PhotoService;
 import com.example.viveinmobiliaria.Services.PropertiesService;
+import com.example.viveinmobiliaria.ViewModels.FiltroViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,13 +92,59 @@ public class listaInmueblesFragment extends Fragment {
             }
                 listaPropiedades = new ArrayList<>();
 
-            getInmuebles(recyclerView);
+            Inmuebles activity = (Inmuebles) getActivity();
+
+            if(activity.isFiltro()) {
+                FiltroViewModel filtroViewModel = ViewModelProviders.of((Inmuebles) cxt).get(FiltroViewModel.class);
+
+                filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Propiedad> propiedads) {
+
+                        adapter.setListaFiltrada(propiedads);
+
+                        listaPropiedades = propiedads;
+
+                        adapter = new MylistaInmueblesRecyclerViewAdapter(
+                                cxt,
+                                propiedads,
+                                mListener
+                        );
+                    }
+                });
+            } else {
+                getInmuebles(recyclerView);
+            }
+
+            /*if(getActivity().is)*/
+
+
 
         }
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FiltroViewModel filtroViewModel = ViewModelProviders.of((Inmuebles) cxt).get(FiltroViewModel.class);
 
+        filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
+            @Override
+            public void onChanged(@Nullable List<Propiedad> propiedads) {
+
+                adapter.setListaFiltrada(propiedads);
+
+                listaPropiedades = propiedads;
+
+                adapter = new MylistaInmueblesRecyclerViewAdapter(
+                        cxt,
+                        propiedads,
+                        mListener
+                );
+            }
+        });
+    }
 
     @Override
     public void onAttach(Context context) {
