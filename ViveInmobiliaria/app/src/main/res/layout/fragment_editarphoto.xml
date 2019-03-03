@@ -7,10 +7,10 @@
 
     <ImageView
         android:id="@+id/imageView_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:layout_weight="3"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,6 @@
         android:id="@+id/imageView_delete_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/fondoBorrar"
         app:layout_constraintStart_toStartOf="parent"

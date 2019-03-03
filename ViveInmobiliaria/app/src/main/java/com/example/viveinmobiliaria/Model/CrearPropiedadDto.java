@@ -1,5 +1,7 @@
 package com.example.viveinmobiliaria.Model;
 
+import java.util.Arrays;
+
 public class CrearPropiedadDto {
     private String title;
     private String description;
@@ -11,6 +13,20 @@ public class CrearPropiedadDto {
     private String city;
     private String province;
     private String loc;
+    private String[] photos;
+
+    public CrearPropiedadDto(String title, String description, double price, int rooms, String address, String zipcode, String city, String province, String loc, String[] photos) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.rooms = rooms;
+        this.address = address;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.province = province;
+        this.loc = loc;
+        this.photos = photos;
+    }
 
     public CrearPropiedadDto(String title, String description, double price, int rooms, String categoryId, String address, String zipcode, String city, String province, String loc) {
         this.title = title;
@@ -23,6 +39,15 @@ public class CrearPropiedadDto {
         this.city = city;
         this.province = province;
         this.loc = loc;
+    }
+
+
+    public String[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String[] photos) {
+        this.photos = photos;
     }
 
     public String getTitle() {
@@ -124,7 +149,9 @@ public class CrearPropiedadDto {
         if (city != null ? !city.equals(that.city) : that.city != null) return false;
         if (province != null ? !province.equals(that.province) : that.province != null)
             return false;
-        return loc != null ? loc.equals(that.loc) : that.loc == null;
+        if (loc != null ? !loc.equals(that.loc) : that.loc != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(photos, that.photos);
     }
 
     @Override
@@ -142,6 +169,7 @@ public class CrearPropiedadDto {
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (province != null ? province.hashCode() : 0);
         result = 31 * result + (loc != null ? loc.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(photos);
         return result;
     }
 }

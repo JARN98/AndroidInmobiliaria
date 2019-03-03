@@ -39,9 +39,9 @@ public class editarPhotoFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 3;
+    private int mColumnCount = 2    ;
     private EditarPhotosListener mListener;
-    private List<String> fotos;
+    private Propiedad fotos;
     private MyeditarPhotoRecyclerViewAdapter adapter;
     private Context cxt;
 
@@ -95,7 +95,7 @@ public class editarPhotoFragment extends Fragment {
                     if (response.code() != 200) {
                         Toast.makeText(getContext(), "Fallo al traer propiedades", Toast.LENGTH_SHORT).show();
                     } else {
-                        fotos = Arrays.asList(response.body().getRows().getPhotos());
+                        fotos = response.body().getRows();
 
                         adapter = new MyeditarPhotoRecyclerViewAdapter(
                                 cxt,
@@ -109,7 +109,8 @@ public class editarPhotoFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ResponseContainerNoList<Propiedad>> call, Throwable t) {
-
+                    Log.e("NetworkFailure", t.getMessage());
+                    Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
                 }
             });
 
