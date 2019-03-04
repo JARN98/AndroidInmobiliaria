@@ -1,5 +1,6 @@
 package com.example.viveinmobiliaria.Fragments;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -20,6 +21,7 @@ import com.example.viveinmobiliaria.Generator.ServiceGenerator;
 import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Generator.UtilUser;
+import com.example.viveinmobiliaria.InmuebleDetallado;
 import com.example.viveinmobiliaria.Inmuebles;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
 import com.example.viveinmobiliaria.Model.Photo;
@@ -31,6 +33,7 @@ import com.example.viveinmobiliaria.Services.PropertiesService;
 import com.example.viveinmobiliaria.ViewModels.FiltroViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -49,6 +52,7 @@ public class listaInmueblesFragment extends Fragment {
     private List<Propiedad> listaPropiedades;
     private MylistaInmueblesRecyclerViewAdapter adapter;
     private Context cxt;
+    private boolean filtrado;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,6 +78,22 @@ public class listaInmueblesFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+/*        FiltroViewModel filtroViewModel = ViewModelProviders.of((Inmuebles) cxt).get(FiltroViewModel.class);
+
+        filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
+            @Override
+            public void onChanged(@Nullable List<Propiedad> propiedads) {
+
+                listaPropiedades = propiedads;
+
+                adapter = new MylistaInmueblesRecyclerViewAdapter(
+                        cxt,
+                        propiedads,
+                        mListener
+                );
+            }
+        });*/
     }
 
     @Override
@@ -90,34 +110,15 @@ public class listaInmueblesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(cxt, mColumnCount));
             }
-                listaPropiedades = new ArrayList<>();
+            listaPropiedades = new ArrayList<>();
 
-            Inmuebles activity = (Inmuebles) getActivity();
-
-            if(activity.isFiltro()) {
-                FiltroViewModel filtroViewModel = ViewModelProviders.of((Inmuebles) cxt).get(FiltroViewModel.class);
-
-                filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Propiedad> propiedads) {
-
-                        adapter.setListaFiltrada(propiedads);
-
-                        listaPropiedades = propiedads;
-
-                        adapter = new MylistaInmueblesRecyclerViewAdapter(
-                                cxt,
-                                propiedads,
-                                mListener
-                        );
-                    }
-                });
+            if (getActivity().getIntent().getExtras() != null && !filtrado){
+                getInmubleFiltrado(recyclerView);
+                filtrado = !filtrado;
             } else {
                 getInmuebles(recyclerView);
+                filtrado = !filtrado;
             }
-
-            /*if(getActivity().is)*/
-
 
 
         }
@@ -129,21 +130,21 @@ public class listaInmueblesFragment extends Fragment {
         super.onStart();
         FiltroViewModel filtroViewModel = ViewModelProviders.of((Inmuebles) cxt).get(FiltroViewModel.class);
 
-        filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
-            @Override
-            public void onChanged(@Nullable List<Propiedad> propiedads) {
+        if (getActivity() != null) {
+            filtroViewModel.getAll().observe(getActivity(), new Observer<List<Propiedad>>() {
+                @Override
+                public void onChanged(@Nullable List<Propiedad> propiedads) {
+                    adapter = new MylistaInmueblesRecyclerViewAdapter(
+                            cxt,
+                            propiedads,
+                            mListener
+                    );
+                }
+            });
 
-                adapter.setListaFiltrada(propiedads);
+        }
 
-                listaPropiedades = propiedads;
 
-                adapter = new MylistaInmueblesRecyclerViewAdapter(
-                        cxt,
-                        propiedads,
-                        mListener
-                );
-            }
-        });
     }
 
     @Override
@@ -172,6 +173,40 @@ public class listaInmueblesFragment extends Fragment {
         } else {
             llamadaALaListaConAuth(recyclerView);
         }
+
+    }
+
+    public void getInmubleFiltrado(final RecyclerView recyclerView){
+        HashMap<String, String> data;
+
+        Activity activity = (Inmuebles) getActivity();
+
+        data = ((Inmuebles) activity).getData();
+
+        PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
+        Call<ResponseContainer<Propiedad>> call = service.getProperties(data);
+
+        call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
+            @Override
+            public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
+                if (response.isSuccessful()){
+                    listaPropiedades = response.body().getRows();
+
+                    adapter = new MylistaInmueblesRecyclerViewAdapter(
+                            cxt,
+                            listaPropiedades,
+                            mListener
+                    );
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
+                Log.e("NetworkFailure", t.getMessage());
+                Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -232,7 +267,6 @@ public class listaInmueblesFragment extends Fragment {
             }
         });
     }
-
 
 
 }

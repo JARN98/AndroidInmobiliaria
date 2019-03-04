@@ -26,6 +26,7 @@
     <string name="RepetirPass">Repetir contraseña</string>
     <string name="dialog_message">¿Estás Seguro?</string>
     <string name="dialog_title">¿Quieres cerrar sesión?</string>
+    <string name="dialog_title2">¿Quieres borrar la propiedad?</string>
     <string name="ok">Salir</string>
     <string name="cancel">Cancelar</string>
     <string name="titulo_propiedad">Título*</string>

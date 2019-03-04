@@ -77,7 +77,14 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="150dp"
+            android:background="@drawable/buttonshape2"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="10"
+            android:shadowDy="10"
+            android:shadowRadius="10"
             android:text="@string/button_login"
+            android:textColor="@android:color/background_dark"
+            android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/button_registroAlogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,8 +92,17 @@
 
         <Button
             android:id="@+id/button_registroAlogin"
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:textColor="#999999"
+            android:textSize="17sp"
             android:text="@string/button_loginAregistro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

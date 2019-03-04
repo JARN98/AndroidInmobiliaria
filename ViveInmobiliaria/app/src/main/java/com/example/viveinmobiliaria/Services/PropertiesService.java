@@ -57,7 +57,6 @@ public interface PropertiesService {
     Call<ResponseContainerNoList<Propiedad>> deleteProperty(@Path("id") String id);
 
     @GET("/properties")
-    @Headers("Content-Type:application/x-www-form-urlencoded; charset=utf-8")
     Call<ResponseContainer<Propiedad>> getProperties(
             @QueryMap Map<String, String> options
     );

@@ -1,6 +1,7 @@
 package com.example.viveinmobiliaria;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +19,9 @@ import com.example.viveinmobiliaria.Generator.TipoAutenticacion;
 import com.example.viveinmobiliaria.Generator.UtilToken;
 import com.example.viveinmobiliaria.Listener.EditarPhotosListener;
 import com.example.viveinmobiliaria.Model.Photo;
+import com.example.viveinmobiliaria.Model.Propiedad;
 import com.example.viveinmobiliaria.Services.PhotoService;
+import com.example.viveinmobiliaria.ViewModels.SubirFotoViewModel;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -130,7 +133,11 @@ public class EditarPhoto extends AppCompatActivity implements EditarPhotosListen
                     if (response.code() != 201) {
                         Toast.makeText(EditarPhoto.this, "Fallo al subir foto", Toast.LENGTH_SHORT).show();
                     } else {
+                        SubirFotoViewModel subirFotoViewModel = ViewModelProviders.of(EditarPhoto.this).get(SubirFotoViewModel.class);
+                        Propiedad propiedad = new Propiedad();
+                        subirFotoViewModel.selectedAplicar(propiedad);
                         Toast.makeText(EditarPhoto.this, "Foto súbida", Toast.LENGTH_SHORT).show();
+
                     }
                 }
 

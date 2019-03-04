@@ -16,7 +16,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/FotoContainer"
         app:layout_constraintEnd_toEndOf="@+id/FotoContainer"
-        app:srcCompat="@drawable/ic_photo_library_black_30dp" />
+        app:srcCompat="@drawable/ic_photo_library_black_24dp" />
 
     <FrameLayout
         android:id="@+id/FotoContainer"

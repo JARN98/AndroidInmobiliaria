@@ -36,6 +36,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +103,7 @@ public class FiltrosF extends Fragment {
         aplicarFiltroViewModel.getAll().observe(getActivity(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                final Map<String, String> data = new HashMap<>();
+                Map<String, String> data = new HashMap<>();
 
                 filtrar(data);
             }
@@ -149,39 +150,18 @@ public class FiltrosF extends Fragment {
 
     private void filtrarPorUbi(Map<String, String> data) {
 
+        data.put("near", loc.getLongitude() + "," + loc.getLatitude());
+
         if (!editText_filter_maxdistance.getText().toString().isEmpty()) {
-            data.put("max_distance", editText_filter_maxdistance.getText().toString());
             data.put("min_distance", "0");
+            data.put("max_distance", editText_filter_maxdistance.getText().toString());
         }
 
-        data.put("near", loc.getLatitude() + "," + loc.getLongitude());
-        PropertiesService service = ServiceGeneratorNear.createService(PropertiesService.class);
-
-        Call<ResponseContainer<Propiedad>> call = service.getProperties(data);
-
-        call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
-            @Override
-            public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
-                FiltroViewModel filtroViewModel = ViewModelProviders.of(getActivity())
-                        .get(FiltroViewModel.class);
-
-                if(response.body() != null){
-                    filtroViewModel.selectPropiedadList(response.body().getRows());
-
-                    startActivity(new Intent(getContext(), Inmuebles.class).putExtra("filtro", "si"));
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
-                Log.e("NetworkFailure", t.getMessage());
-                Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
+        startActivity(new Intent(getContext(), Inmuebles.class).putExtra("data", (Serializable) data));
 
     }
+
+
 
     private void filtrar(Map<String, String> data) {
 
@@ -241,25 +221,9 @@ public class FiltrosF extends Fragment {
         PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
 
 
-        Call<ResponseContainer<Propiedad>> call = service.getProperties(data);
+        startActivity(new Intent(getContext(), Inmuebles.class).putExtra("data", (Serializable) data));
 
-        call.enqueue(new Callback<ResponseContainer<Propiedad>>() {
-            @Override
-            public void onResponse(Call<ResponseContainer<Propiedad>> call, Response<ResponseContainer<Propiedad>> response) {
-                FiltroViewModel filtroViewModel = ViewModelProviders.of(getActivity())
-                        .get(FiltroViewModel.class);
 
-                filtroViewModel.selectPropiedadList(response.body().getRows());
-
-                startActivity(new Intent(getContext(), Inmuebles.class).putExtra("filtro", "si"));
-            }
-
-            @Override
-            public void onFailure(Call<ResponseContainer<Propiedad>> call, Throwable t) {
-                Log.e("NetworkFailure", t.getMessage());
-                Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
     }

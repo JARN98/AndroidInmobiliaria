@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.example.viveinmobiliaria.Model.Propiedad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FiltroViewModel extends ViewModel {
@@ -16,5 +17,7 @@ public class FiltroViewModel extends ViewModel {
         listaPropiedades.setValue(propiedades);
     }
 
-    public MutableLiveData<List<Propiedad>> getAll() { return listaPropiedades; }
+    public MutableLiveData<List<Propiedad>> getAll() {
+        return listaPropiedades;
+    }
 }

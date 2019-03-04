@@ -55,8 +55,6 @@ public class MyeditarPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Myedi
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues;
-/*        holder.mIdView.setText(mValues.get(position));
-        holder.mContentView.setText(mValues.get(position));*/
         photos = new ArrayList<String>(Arrays.asList(mValues.getPhotos()));
 
             holder.imageView_photo.setScaleType(ImageView.ScaleType.CENTER_CROP);

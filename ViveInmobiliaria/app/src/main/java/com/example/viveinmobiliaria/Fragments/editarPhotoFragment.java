@@ -1,8 +1,11 @@
 package com.example.viveinmobiliaria.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +28,7 @@ import com.example.viveinmobiliaria.Model.ResponseContainerNoList;
 import com.example.viveinmobiliaria.R;
 import com.example.viveinmobiliaria.Services.PhotoService;
 import com.example.viveinmobiliaria.Services.PropertiesService;
+import com.example.viveinmobiliaria.ViewModels.SubirFotoViewModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -115,7 +119,47 @@ public class editarPhotoFragment extends Fragment {
             });
 
 
+            SubirFotoViewModel subirFotoViewModel = ViewModelProviders.of(getActivity()).get(SubirFotoViewModel.class);
+
+            subirFotoViewModel.getAll().observe(getActivity(), new Observer<Propiedad>() {
+                @Override
+                public void onChanged(@Nullable Propiedad propiedad) {
+                    EditarPhoto activity = (EditarPhoto) getActivity();
+                    String id = activity.getIdProperty();
+                    final PropertiesService service = ServiceGenerator.createService(PropertiesService.class);
+                    Call<ResponseContainerNoList<Propiedad>> call = service.getOneProperty(id);
+
+                    call.enqueue(new Callback<ResponseContainerNoList<Propiedad>>() {
+                        @Override
+                        public void onResponse(Call<ResponseContainerNoList<Propiedad>> call, Response<ResponseContainerNoList<Propiedad>> response) {
+                            if (response.code() != 200) {
+                                Toast.makeText(getContext(), "Fallo al traer propiedades", Toast.LENGTH_SHORT).show();
+                            } else {
+                                fotos = response.body().getRows();
+
+                                adapter = new MyeditarPhotoRecyclerViewAdapter(
+                                        cxt,
+                                        fotos,
+                                        mListener
+                                );
+
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseContainerNoList<Propiedad>> call, Throwable t) {
+                            Log.e("NetworkFailure", t.getMessage());
+                            Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+
+
         }
+
+
         return view;
     }
 

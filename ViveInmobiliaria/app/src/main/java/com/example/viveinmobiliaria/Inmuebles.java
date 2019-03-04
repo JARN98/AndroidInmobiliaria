@@ -1,11 +1,16 @@
 package com.example.viveinmobiliaria;
 
+import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +29,11 @@ import com.example.viveinmobiliaria.Fragments.listaInmueblesFavoritos;
 import com.example.viveinmobiliaria.Fragments.listaInmueblesFragment;
 import com.example.viveinmobiliaria.Generator.UtilUser;
 import com.example.viveinmobiliaria.Listener.InmueblesListener;
+import com.example.viveinmobiliaria.Model.Propiedad;
+import com.example.viveinmobiliaria.ViewModels.FiltroViewModel;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Inmuebles extends AppCompatActivity implements InmueblesListener {
 
@@ -32,6 +42,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
     private Menu menu;
     private FloatingActionButton fab;
     private boolean filtro;
+    private HashMap<String, String> data;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,21 +55,21 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesFragment())
                             .commit();
-                    fab.show();
+                    enseniarFab();
                     return true;
                 case R.id.navigation_dashboard:
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesFavoritos())
                             .commit();
-                    fab.show();
+                    enseniarFab();
                     return true;
                 case R.id.navigation_notifications:
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.contenedor, new listaInmueblesDelUsuarioFragment())
                             .commit();
-                    fab.show();
+                    enseniarFab();
                     return true;
                 case R.id.navigation_cuenta:
                     if (UtilUser.getEmail(Inmuebles.this) == null) {
@@ -79,6 +90,12 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         }
     };
 
+    private void enseniarFab() {
+        if(UtilUser.getNombre(this) != null) {
+            fab.show();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +108,17 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         contenedor = findViewById(R.id.contenedor);
         fab = findViewById(R.id.fab);
 
-/*        Intent intent = getIntent();
-
-        filtro = intent.getStringExtra("id");*/
-
-
+        if(getIntent().getExtras() != null){
+            data = (HashMap<String,String>) getIntent().getExtras().get("data");
+        }
 
         events();
 
     }
 
+    public HashMap<String, String> getData() {
+        return data;
+    }
 
     private void events() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +146,7 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
                 startActivity(i);
                 return true;
             case R.id.filter_list:
+
                 Intent in = new Intent(Inmuebles.this, Filtros.class);
                 startActivity(in);
                 return true;
@@ -154,14 +173,10 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
 
         ocultarBotonesParaAnonimos(menu);
 
-        Bundle b = new Bundle();
-        b = getIntent().getExtras();
+/*        Intent intent = getIntent();
 
-        if (b != null) {
-            if (!b.getString("filtro").isEmpty()) {
-                filtro = true;
-            }
-        }
+        filtro = intent.getBooleanExtra("filtro", false);*/
+
 
         MenuItem inicio = menu.findItem(R.id.navigation_home);
         inicio.setChecked(true);
@@ -183,4 +198,12 @@ public class Inmuebles extends AppCompatActivity implements InmueblesListener {
         getMenuInflater().inflate(R.menu.toolbar2, menu);
         return true;
     }
+
+/*    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 7 && resultCode == RESULT_OK) {
+
+        }
+    }*/
 }

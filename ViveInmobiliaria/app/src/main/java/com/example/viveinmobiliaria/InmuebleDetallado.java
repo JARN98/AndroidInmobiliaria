@@ -1,10 +1,12 @@
 package com.example.viveinmobiliaria;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +46,7 @@ public class InmuebleDetallado extends AppCompatActivity {
     private MenuItem action_editarPhoto, action_editarPropiedad, action_eliminarPropiedad;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +76,14 @@ public class InmuebleDetallado extends AppCompatActivity {
                     Toast.makeText(InmuebleDetallado.this, "Error al ver Inmueble", Toast.LENGTH_SHORT).show();
                 } else {
                     propiedad = response.body().getRows();
-                    if(UtilUser.getNombre(InmuebleDetallado.this) != null){
-                        if ( UtilUser.getNombre(InmuebleDetallado.this).equals(propiedad.getOwnerIdname())){
-                            /*
-                            Esconder iconos de navbar
-                             */
+                    if (UtilUser.getNombre(InmuebleDetallado.this) != null) {
+                        if (UtilUser.getNombre(InmuebleDetallado.this).equals(propiedad.getOwnerIdname())) {
 
-                            Toast.makeText(InmuebleDetallado.this, "Entra", Toast.LENGTH_SHORT).show();
+                        } else {
+                            getSupportActionBar().hide();
                         }
+                    } else {
+                        getSupportActionBar().hide();
                     }
 
                     sets();
@@ -93,15 +96,12 @@ public class InmuebleDetallado extends AppCompatActivity {
                 Toast.makeText(InmuebleDetallado.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if(UtilUser.getNombre(InmuebleDetallado.this) != null){
-            item.setVisible(false);
-        }
 
         switch (id) {
             case R.id.action_editarPhoto:
@@ -113,11 +113,34 @@ public class InmuebleDetallado extends AppCompatActivity {
                 startActivity(new Intent(InmuebleDetallado.this, CrearInmueble.class).putExtra("idpropiedad", propiedad.getId()));
                 return true;
             case R.id.action_eliminarPropiedad:
-                eliminarPropiedad();
+                dialogoDeEliminar();
+
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void dialogoDeEliminar() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.dialog_message)
+                .setTitle(R.string.dialog_title2);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                UtilUser.clearSharedPreferences(InmuebleDetallado.this);
+                eliminarPropiedad();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
     private void eliminarPropiedad() {
@@ -146,7 +169,8 @@ public class InmuebleDetallado extends AppCompatActivity {
         textView_descripcion.setText(propiedad.getDescription());
         textView_city_detalle.setText(propiedad.getCity() + " - " + propiedad.getProvince());
         textView_direccion_detalle.setText(propiedad.getAddress());
-        textView_price_detalle.setText(propiedad.getPrice() + " €/mes");
+        textView_price_detalle.setText(propiedad.getPrice() + " €");
+
 
         imagenes = Arrays.asList(propiedad.getPhotos());
 

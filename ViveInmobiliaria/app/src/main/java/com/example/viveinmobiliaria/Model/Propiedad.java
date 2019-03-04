@@ -21,6 +21,9 @@ public class Propiedad {
     public String[] photos = null;
     public boolean isFav;
 
+    public Propiedad() {
+    }
+
     public Propiedad(String title, String description, Integer price, Integer rooms, String address, String zipcode, String city, String province, String loc, OwnerId ownerId, String createdAt, String updatedAt, Integer v, String id, String[] photos, boolean isFav) {
         this.title = title;
         this.description = description;

@@ -263,7 +263,7 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView textView_category, textView_title, textView_price, textView_rooms, textView_size, textView_direccion, textView_ciudad;
+        public final TextView textView_title, textView_price, textView_rooms, textView_size, textView_direccion, textView_ciudad;
         public final ImageView imageView_fav, imageView;
         public Propiedad mItem;
         public PropiedaFavoritasDto item;
@@ -271,7 +271,6 @@ public class MylistaInmueblesRecyclerViewAdapter extends RecyclerView.Adapter<My
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textView_category = view.findViewById(R.id.textView_category);
             textView_title = view.findViewById(R.id.textView_title);
             textView_price = view.findViewById(R.id.textView_price);
             textView_rooms = view.findViewById(R.id.textView_rooms);
